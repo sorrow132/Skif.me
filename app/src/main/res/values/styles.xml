@@ -1,0 +1,85 @@
+<resources>
+    <!-- Base application theme. -->
+    <style name="AppTheme" parent="Theme.AppCompat.Light.DarkActionBar">
+        <!-- Customize your theme here. -->
+        <item name="colorPrimary">@color/colorPrimary</item>
+        <item name="colorPrimaryDark">@color/colorPrimary</item>
+        <item name="colorAccent">@color/colorPrimary</item>
+        <item name="android:previewImage">@drawable/ic_vector_stroke</item>
+    </style>
+
+    <style name="BottomSheetDialog" parent="Theme.Design.Light.BottomSheetDialog">
+        <item name="bottomSheetStyle">@style/BottomSheetStyle</item>
+    </style>
+
+    <style name="BottomSheetStyle" parent="Widget.Design.BottomSheet.Modal">
+        <item name="android:background">@android:color/transparent</item>
+    </style>
+
+    <style name="AppTheme.NoActionBar" parent="AppTheme">
+        <item name="windowActionBar">false</item>
+        <item name="windowNoTitle">true</item>
+    </style>
+
+    <style name="skif.me" parent="Theme.AppCompat.DayNight">
+        <item name="android:textSize">36sp</item>
+        <item name="android:letterSpacing">0.04</item>
+        <item name="android:textColor">#FFFFFF</item>
+    </style>
+
+    <style name="your_phone_number">
+        <item name="android:textSize">24sp</item>
+        <item name="android:letterSpacing">0.02</item>
+        <item name="android:textColor">#6B7589</item>
+    </style>
+
+    <style name="some_id">
+        <item name="android:textSize">18sp</item>
+        <item name="android:letterSpacing">0</item>
+        <item name="android:textColor">#2C2A5A</item>
+    </style>
+
+    <style name="activity_two_phone_number">
+        <item name="android:textSize">16sp</item>
+        <item name="android:letterSpacing">-0.02</item>
+        <item name="android:textColor">#1B6ED4</item>
+    </style>
+
+    <style name="activity_two_numbers">
+        <item name="android:textSize">24sp</item>
+        <item name="android:letterSpacing">0.02</item>
+        <item name="android:textColor">#2C2A5A</item>
+    </style>
+
+    <style name="activity_two_info">
+        <item name="android:textSize">16sp</item>
+        <item name="android:letterSpacing">-0.02</item>
+        <item name="android:textColor">#2C2A5A
+        </item>
+    </style>
+
+    <style name="no_observer">
+        <item name="android:textSize">22sp</item>
+        <item name="android:letterSpacing">0.02</item>
+        <item name="android:textColor">#2C2A5A</item>
+    </style>
+
+    <style name="addObserver">
+        <item name="android:textSize">17sp</item>
+        <item name="android:letterSpacing">-0.02</item>
+        <item name="android:textColor">#FFFFFF</item>
+    </style>
+
+    <style name="bottom_sheet_title">
+        <item name="android:textSize">17sp</item>
+        <item name="android:letterSpacing">-0.02</item>
+        <item name="android:textColor">#2C2A5A</item>
+    </style>
+
+    <style name="bottom_sheet_cancel_label">
+        <item name="android:textSize">17sp</item>
+        <item name="android:letterSpacing">-0.02</item>
+        <item name="android:textColor">#EB5757</item>
+    </style>
+
+</resources>

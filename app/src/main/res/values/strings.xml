@@ -1,0 +1,18 @@
+<resources>
+    <string name="app_name">SKIF.ME</string>
+    <string name="skif_me">SKIF.ME</string>
+    <string name="Some_id">Войти в аккаунт</string>
+    <string name="your_phone_number">Ваш номер телефона</string>
+    <string name="seven_phone_num">+7</string>
+    <string name="phone_number">Номер телефона</string>
+    <string name="sms_info">Мы вышлем вам на телефон \nСМС с пятизначным кодом, \nнеобходимым для входа</string>
+    <string name="authorization">Авторизация</string>
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="observe">Пока что нет ни одного\n наблюдателя</string>
+    <string name="new_observer">Добавить наблюдателя</string>
+    <string name="bottom_sheet_cancel">Отмена</string>
+    <string name="bottom_sheet_phone_number">Номер телефона</string>
+    <string name="bottom_sheet_new_obs">Новый наблюдатель</string>
+    <string name="save">Сохранить</string>
+</resources>
