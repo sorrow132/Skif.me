@@ -45,7 +45,6 @@
         android:layout_alignParentBottom="true"
         android:layout_marginEnd="24dp"
         android:layout_marginBottom="32dp"
-        android:alpha="0.2"
         android:background="@drawable/ic_circle_action"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"

@@ -14,18 +14,25 @@
         android:gravity="center"
         android:orientation="horizontal">
 
-        <TextView
+        <RelativeLayout
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/bottom_sheet_new_obs"
-            android:textAppearance="@style/bottom_sheet_title" />
+            android:layout_height="wrap_content">
 
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="20dp"
-            android:text="@string/bottom_sheet_cancel"
-            android:textAppearance="@style/bottom_sheet_cancel_label" />
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerInParent="true"
+                android:text="@string/bottom_sheet_new_obs"
+                android:textAppearance="@style/bottom_sheet_title" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentEnd="true"
+                android:layout_marginStart="20dp"
+                android:text="@string/bottom_sheet_cancel"
+                android:textAppearance="@style/bottom_sheet_cancel_label" />
+        </RelativeLayout>
     </LinearLayout>
 
     <TextView
@@ -45,9 +52,9 @@
             android:layout_width="wrap_content"
             android:layout_height="40dp"
             android:layout_weight="7"
-            android:textAppearance="@style/addObserver"
-            android:background="#D8E0ED"
+            android:background="@color/colorWhite"
             android:inputType="phone"
+            android:textAppearance="@style/bottom_sheet_number"
             app:allowed_chars="1234567890"
             app:mask="+7(###)###-##-##" />
 
@@ -73,22 +80,15 @@
             android:layout_height="wrap_content"
             android:timePickerMode="spinner" />
 
-        <FrameLayout
-            android:layout_width="wrap_content"
-            android:layout_height="match_parent"
-            >
-
-            <ImageView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:background="@drawable/ic_rectangle_9" />
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center"
-                android:text="@string/save"
-                android:textAppearance="@style/addObserver" />
-        </FrameLayout>
+        <Button
+            android:id="@+id/buttonSave"
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:layout_marginStart="20dp"
+            android:layout_marginEnd="20dp"
+            android:text="@string/save_btn"
+            android:textColor="#FFFFFF"
+            android:layout_marginBottom="20dp"
+            android:background="@drawable/button_background"/>
     </LinearLayout>
 </LinearLayout>

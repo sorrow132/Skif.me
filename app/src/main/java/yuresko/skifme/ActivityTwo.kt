@@ -16,6 +16,8 @@ class ActivityTwo : AppCompatActivity() {
         maskedEditText = findViewById(R.id.phone_input)
         buttonNext = findViewById(R.id.imageView2)
 
+        buttonNext.alpha = 0.10f
+
         buttonNext.setOnClickListener {
             val intent = Intent(this, ActivityThree::class.java)
             startActivity(intent)

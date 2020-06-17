@@ -15,4 +15,5 @@
     <string name="bottom_sheet_phone_number">Номер телефона</string>
     <string name="bottom_sheet_new_obs">Новый наблюдатель</string>
     <string name="save">Сохранить</string>
+    <string name="save_btn">Сохранить</string>
 </resources>
