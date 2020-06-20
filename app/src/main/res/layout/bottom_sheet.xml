@@ -1,12 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/bottom_sheet_container"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:background="#ffffff"
     android:orientation="vertical"
-    android:padding="16dp">
+    android:padding="16dp"
+    tools:context=".mainmenu.ActivityMenu">
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -49,18 +51,20 @@
         android:orientation="horizontal">
 
         <br.com.sapereaude.maskedEditText.MaskedEditText
+            android:id="@+id/maskedEt"
             android:layout_width="wrap_content"
             android:layout_height="40dp"
+            android:layout_gravity="center"
             android:layout_weight="7"
-            android:background="@color/colorWhite"
             android:inputType="phone"
             android:textAppearance="@style/bottom_sheet_number"
             app:allowed_chars="1234567890"
             app:mask="+7(###)###-##-##" />
 
         <ImageView
-            android:layout_width="32dp"
-            android:layout_height="30dp"
+            android:id="@+id/contacts"
+            android:layout_width="wrap_content"
+            android:layout_height="20dp"
             android:layout_marginLeft="25dp"
             android:layout_marginTop="8dp"
             android:layout_marginRight="25dp"

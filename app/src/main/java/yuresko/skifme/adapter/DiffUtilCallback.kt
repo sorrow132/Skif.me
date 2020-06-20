@@ -1,7 +1,7 @@
 package yuresko.skifme.adapter
 
 import androidx.recyclerview.widget.DiffUtil
-import yuresko.skifme.repository.Item
+import yuresko.skifme.registration.model.Item
 
 class DiffUtilCallback : DiffUtil.ItemCallback<Item>() {
     override fun areItemsTheSame(oldItem: Item, newItem: Item): Boolean {

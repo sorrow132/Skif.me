@@ -3,7 +3,7 @@ package yuresko.skifme.adapter
 import android.view.ViewGroup
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
-import yuresko.skifme.repository.Item
+import yuresko.skifme.registration.model.Item
 import java.util.*
 
 class RecyclerAdapter : ListAdapter<Item, RecyclerView.ViewHolder>(DiffUtilCallback()),
@@ -11,11 +11,31 @@ class RecyclerAdapter : ListAdapter<Item, RecyclerView.ViewHolder>(DiffUtilCallb
 
     val listOfItems: MutableList<Item> =
         mutableListOf(
-            Item(1, "+7(999)999-99-99", "14:00"),
-            Item(2, "+7(999)999-99-99", "14:00"),
-            Item(3, "+7(999)999-99-99", "14:00"),
-            Item(4, "+7(999)999-99-99", "14:00"),
-            Item(5, "+7(999)999-99-99", "14:00")
+            Item(
+                1,
+                "+7(999)999-99-99",
+                "14:00"
+            ),
+            Item(
+                2,
+                "+7(999)999-99-99",
+                "14:00"
+            ),
+            Item(
+                3,
+                "+7(999)999-99-99",
+                "14:00"
+            ),
+            Item(
+                4,
+                "+7(999)999-99-99",
+                "14:00"
+            ),
+            Item(
+                5,
+                "+7(999)999-99-99",
+                "14:00"
+            )
         )
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
@@ -39,8 +59,8 @@ class RecyclerAdapter : ListAdapter<Item, RecyclerView.ViewHolder>(DiffUtilCallb
                 Collections.swap(listOfItems, i, i - 1)
             }
         }
-        listOfItems[fromPosition].position = fromPosition
-        listOfItems[toPosition].position = toPosition
+        listOfItems[fromPosition].id = fromPosition
+        listOfItems[toPosition].id = toPosition
         notifyItemMoved(fromPosition, toPosition)
         return listOfItems
     }
@@ -56,8 +76,8 @@ class RecyclerAdapter : ListAdapter<Item, RecyclerView.ViewHolder>(DiffUtilCallb
                 Collections.swap(listOfItems, i, i - 1)
             }
         }
-        listOfItems[fromPosition].position = fromPosition
-        listOfItems[toPosition].position = toPosition
+        listOfItems[fromPosition].id = fromPosition
+        listOfItems[toPosition].id = toPosition
         notifyItemMoved(fromPosition, toPosition)
         return true
     }

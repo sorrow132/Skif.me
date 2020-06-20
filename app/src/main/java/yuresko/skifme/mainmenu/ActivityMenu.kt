@@ -1,27 +1,23 @@
-package yuresko.skifme
+package yuresko.skifme.mainmenu
 
 import android.os.Bundle
 import android.view.LayoutInflater
-import android.view.View
 import android.widget.Button
-import android.widget.ImageView
-import android.widget.LinearLayout
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.bottomsheet.BottomSheetDialog
-import kotlinx.android.synthetic.main.bottom_sheet.*
 import yuresko.skifme.R
 import yuresko.skifme.adapter.ItemTouchCallback
 import yuresko.skifme.adapter.RecyclerAdapter
-import yuresko.skifme.repository.Repository
+
 
 class ActivityMenu : AppCompatActivity() {
     private lateinit var button: Button
     private lateinit var recyclerView: RecyclerView
+//    private lateinit var contacts: ImageView
 
-    private val repo = Repository()
     private var adapter = RecyclerAdapter()
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -29,6 +25,14 @@ class ActivityMenu : AppCompatActivity() {
         setContentView(R.layout.activity_main_menu)
         button = findViewById(R.id.buttonSaveMenu)
         recyclerView = findViewById(R.id.recyclerView)
+
+//        contacts = findViewById(R.id.contacts)
+//
+//        contacts.setOnClickListener {
+//            val i = Intent(Intent.ACTION_PICK)
+//            i.type = ContactsContract.CommonDataKinds.Phone.CONTENT_TYPE
+//            startActivityForResult(i, 0)
+//        }
 
         adapter.submitList(adapter.listOfItems)
         recyclerView.layoutManager = LinearLayoutManager(this)
@@ -43,12 +47,15 @@ class ActivityMenu : AppCompatActivity() {
         button.setOnClickListener {
             val bottomSheetDialog = BottomSheetDialog(this)
             val view = LayoutInflater.from(applicationContext)
-                .inflate(R.layout.bottom_sheet, findViewById(R.id.bottom_sheet_container))
+                .inflate(
+                    R.layout.bottom_sheet, findViewById(
+                        R.id.bottom_sheet_container
+                    )
+                )
             bottomSheetDialog.setContentView(view)
             bottomSheetDialog.show()
         }
     }
-
 
     private fun initSwipe() {
         ItemTouchHelper(object : ItemTouchHelper.SimpleCallback(0, ItemTouchHelper.LEFT) {
@@ -68,5 +75,4 @@ class ActivityMenu : AppCompatActivity() {
             }
         })
     }
-
 }

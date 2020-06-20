@@ -1,4 +1,4 @@
-package yuresko.skifme
+package yuresko.skifme.authentication
 
 import android.text.Editable
 import android.text.TextWatcher

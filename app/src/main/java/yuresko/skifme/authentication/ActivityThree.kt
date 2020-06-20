@@ -1,9 +1,11 @@
-package yuresko.skifme
+package yuresko.skifme.authentication
 
 import android.content.Intent
 import android.os.Bundle
 import android.widget.ImageView
 import androidx.appcompat.app.AppCompatActivity
+import yuresko.skifme.R
+import yuresko.skifme.mainmenu.ActivityMenu
 
 class ActivityThree : AppCompatActivity() {
     private lateinit var buttonNext: ImageView
