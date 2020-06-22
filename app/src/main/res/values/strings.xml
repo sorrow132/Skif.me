@@ -16,4 +16,7 @@
     <string name="bottom_sheet_new_obs">Новый наблюдатель</string>
     <string name="save">Сохранить</string>
     <string name="save_btn">Сохранить</string>
+    <string name="SMSCode">Код из СМС</string>
+    <string name="send_again">Отправить еще раз</string>
+    <string name="textViewAsk">Сообщение не приходит?</string>
 </resources>

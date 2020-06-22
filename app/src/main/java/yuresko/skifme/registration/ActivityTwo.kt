@@ -2,29 +2,27 @@ package yuresko.skifme.registration
 
 import android.content.Intent
 import android.os.Bundle
-import android.util.Log
+import android.view.View
 import android.widget.ImageView
+import android.widget.ProgressBar
 import androidx.appcompat.app.AppCompatActivity
+import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import br.com.sapereaude.maskedEditText.MaskedEditText
-import io.reactivex.Completable
-import io.reactivex.android.schedulers.AndroidSchedulers
-import io.reactivex.schedulers.Schedulers
-import okhttp3.OkHttpClient
-import retrofit2.*
-import retrofit2.converter.gson.GsonConverterFactory
+import kotlinx.android.synthetic.main.activity_two.*
 import yuresko.skifme.R
 import yuresko.skifme.SkiffApplication
 import yuresko.skifme.authentication.ActivityThree
-import yuresko.skifme.authentication.EditTextWatcher
-import yuresko.skifme.network.SkiffMeApi
+import yuresko.skifme.network.model.RequestBody
+import yuresko.skifme.registration.model.RegistrationState
 import yuresko.skifme.repository.IRepository
 import javax.inject.Inject
 
 class ActivityTwo : AppCompatActivity() {
     private lateinit var maskedEditText: MaskedEditText
     private lateinit var buttonNext: ImageView
+    private lateinit var progressBar: ProgressBar
 
     @Inject
     lateinit var repository: IRepository
@@ -35,53 +33,71 @@ class ActivityTwo : AppCompatActivity() {
         (application as SkiffApplication).component.inject(this)
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_two)
+        maskedEditText = findViewById(R.id.phoneInput)
+        buttonNext = findViewById(R.id.buttonActivityTwo)
+        progressBar = findViewById(R.id.progressBarActivityTwo)
 
-        viewModel = ViewModelProvider(this, object : ViewModelProvider.Factory {
-            override fun <T : ViewModel?> create(modelClass: Class<T>): T {
-                return modelClass.getConstructor(
-                    IRepository::class.java
-                )
-                    .newInstance(repository)
-            }
-        }).get(RegViewModel::class.java)
-
-        maskedEditText = findViewById(R.id.phone_input)
-        buttonNext = findViewById(R.id.imageView2)
-
-        viewModel.sendPhone("79013532604")
-
-        buttonNext.setOnClickListener {
-            val intent = Intent(this, ActivityThree::class.java)
-            startActivity(intent)
-        }
         supportActionBar?.title = "Авторизация"
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
 
-        maskedEditText.addTextChangedListener(EditTextWatcher {
-            invalidate()
+        buttonNext.isEnabled = false
+        buttonNext.alpha = 0.2f
+
+        viewModel = ViewModelProvider(this, object : ViewModelProvider.Factory {
+            override fun <T : ViewModel?> create(modelClass: Class<T>): T {
+                return RegViewModel(repository) as T
+            }
+        }).get(RegViewModel::class.java)
+
+        maskedEditText.addTextChangedListener(RegTextWatcher {
+            invalidateFrom()
         })
 
+        observeLiveData()
 
-        val retrofit = Retrofit.Builder()
-            .addConverterFactory(GsonConverterFactory.create())
-            .baseUrl("https://www.skiff.sol.bz/api/users/")
-
-        val ttt = retrofit.build().create(SkiffMeApi::class.java)
-
-        val call = ttt.registration("79013532604")
-
-        call.enqueue(object: Callback<Any>{
-            override fun onFailure(call: Call<Any>, t: Throwable) {
-
-            }
-
-            override fun onResponse(call: Call<Any>, response: Response<Any>) {
-                Log.d("1","1")
-            }
-        })
     }
 
-    private fun invalidate() {
-        buttonNext.imageAlpha = 0
+    private fun invalidateFrom() {
+        if (maskedEditText.text?.length == 16) {
+            buttonNext.isEnabled = true
+            buttonNext.alpha = 1f
+        } else {
+            buttonNext.isEnabled = false
+            buttonNext.alpha = 0.2f
+        }
+    }
+
+    private fun observeLiveData() {
+        viewModel.state.observe(this, Observer { state ->
+            when (state) {
+                RegistrationState.Loading -> {
+                    progressBar.visibility = View.GONE
+                    textViewNumber.visibility = View.GONE
+                    phoneInput.visibility = View.GONE
+                    buttonActivityTwo.visibility = View.GONE
+                    textViewActivityTwo.visibility = View.GONE
+                }
+                RegistrationState.Default -> {
+                    progressBar.visibility = View.GONE
+                    textViewNumber.visibility = View.VISIBLE
+                    phoneInput.visibility = View.VISIBLE
+                    buttonActivityTwo.visibility = View.VISIBLE
+                    textViewActivityTwo.visibility = View.VISIBLE
+
+                    buttonNext.setOnClickListener {
+                        viewModel.fetchState(RequestBody(maskedEditText.rawText))
+                        val intent = Intent(this, ActivityThree::class.java)
+                        startActivity(intent)
+                    }
+                }
+                is RegistrationState.Error -> {
+                    progressBar.visibility = View.GONE
+                    textViewNumber.visibility = View.GONE
+                    phoneInput.visibility = View.GONE
+                    buttonActivityTwo.visibility = View.GONE
+                    textViewActivityTwo.visibility = View.GONE
+                }
+            }
+        })
     }
 }

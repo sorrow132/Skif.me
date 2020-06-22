@@ -1,12 +1,11 @@
-package yuresko.skifme.registration
+package yuresko.skifme
 
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.widget.ImageView
 import android.widget.TextView
-import yuresko.skifme.R
-import yuresko.skifme.SkiffApplication
+import yuresko.skifme.registration.ActivityTwo
 
 class MainActivity : AppCompatActivity() {
     private lateinit var textViewFirst: TextView

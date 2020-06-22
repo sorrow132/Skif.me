@@ -34,7 +34,7 @@ class ActivityMenu : AppCompatActivity() {
 //            startActivityForResult(i, 0)
 //        }
 
-        adapter.submitList(adapter.listOfItems)
+        adapter.submitList(adapter.listOfPhoneTimes)
         recyclerView.layoutManager = LinearLayoutManager(this)
         recyclerView.adapter = adapter
         initSwipe()
@@ -71,7 +71,7 @@ class ActivityMenu : AppCompatActivity() {
             }
 
             override fun onSwiped(viewHolder: RecyclerView.ViewHolder, direction: Int) {
-                adapter.listOfItems.removeAt(viewHolder.adapterPosition)
+                adapter.listOfPhoneTimes.removeAt(viewHolder.adapterPosition)
             }
         })
     }

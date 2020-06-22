@@ -1,6 +1,6 @@
-package yuresko.skifme.registration.model
+package yuresko.skifme.mainmenu.model
 
-data class Item(
+data class PhoneTime(
     var id: Int,
     var num: String,
     var time: String

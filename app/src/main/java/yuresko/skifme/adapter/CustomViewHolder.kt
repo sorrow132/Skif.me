@@ -5,7 +5,7 @@ import android.view.ViewGroup
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import yuresko.skifme.R
-import yuresko.skifme.registration.model.Item
+import yuresko.skifme.mainmenu.model.PhoneTime
 
 class CustomViewHolder(parent: ViewGroup) :
     RecyclerView.ViewHolder(
@@ -17,9 +17,9 @@ class CustomViewHolder(parent: ViewGroup) :
     private var textViewNum: TextView? = itemView.findViewById(R.id.number)
     private var textViewTime: TextView? = itemView.findViewById(R.id.time)
 
-    fun bind(item: Item) {
-        textViewNum?.text = item.num
-        textViewTime?.text = item.time
+    fun bind(phoneTime: PhoneTime) {
+        textViewNum?.text = phoneTime.num
+        textViewTime?.text = phoneTime.time
     }
 
 }

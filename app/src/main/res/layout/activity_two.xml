@@ -16,13 +16,13 @@
         android:layout_marginBottom="12dp"
         android:text="@string/phone_number"
         android:textAppearance="@style/activity_two_phone_number"
-        app:layout_constraintBottom_toTopOf="@+id/phone_input"
+        app:layout_constraintBottom_toTopOf="@+id/phoneInput"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
-        app:layout_constraintStart_toStartOf="@+id/phone_input" />
+        app:layout_constraintStart_toStartOf="@+id/phoneInput" />
 
     <br.com.sapereaude.maskedEditText.MaskedEditText
-        android:id="@+id/phone_input"
+        android:id="@+id/phoneInput"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_below="@+id/textViewNumber"
@@ -38,7 +38,7 @@
         app:mask="+7(###)###-##-##" />
 
     <ImageView
-        android:id="@+id/imageView2"
+        android:id="@+id/buttonActivityTwo"
         android:layout_width="64dp"
         android:layout_height="64dp"
         android:layout_alignParentEnd="true"
@@ -52,6 +52,7 @@
         app:layout_constraintVertical_bias="0.987" />
 
     <TextView
+        android:id="@+id/textViewActivityTwo"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="25dp"
@@ -59,9 +60,18 @@
         android:text="@string/sms_info"
         android:textAppearance="@style/activity_two_info"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toStartOf="@+id/imageView2"
+        app:layout_constraintEnd_toStartOf="@+id/buttonActivityTwo"
         app:layout_constraintHorizontal_bias="0.264"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_bias="0.922" />
+
+    <ProgressBar
+        android:id="@+id/progressBarActivityTwo"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 </androidx.constraintlayout.widget.ConstraintLayout>

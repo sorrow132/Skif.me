@@ -6,7 +6,7 @@
     android:layout_height="match_parent"
     
     android:background="@drawable/ic_background"
-    tools:context=".registration.MainActivity">
+    tools:context=".MainActivity">
 
     <FrameLayout
         android:id="@+id/frameLayout"

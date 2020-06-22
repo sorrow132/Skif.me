@@ -2,28 +2,54 @@ package yuresko.skifme.registration
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.ViewModel
-import io.reactivex.Completable
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
+import yuresko.skifme.base.BaseViewModel
+import yuresko.skifme.network.model.RequestBody
+import yuresko.skifme.registration.model.RegistrationState
 import yuresko.skifme.repository.IRepository
+import yuresko.skifme.utils.addTo
 
 interface IRegViewModel {
-    val phoneNumber: LiveData<String>
 
-    fun sendPhone(phoneNUmber: String)
+    val isEnabled: LiveData<Boolean>
+
+    val state: LiveData<RegistrationState>
+
+    fun fetchState(requestBody: RequestBody)
 }
 
-class RegViewModel(private val IRepository: IRepository) : ViewModel(), IRegViewModel {
+class RegViewModel(private val repository: IRepository) : IRegViewModel, BaseViewModel() {
 
-    override val phoneNumber: MutableLiveData<String> = MutableLiveData()
+    override val isEnabled: MutableLiveData<Boolean> = MutableLiveData()
 
-    override fun sendPhone(phoneNUmber: String) {
-        Completable.fromAction {
-            IRepository
-                .verifyNumber(phoneNUmber)
-        }.subscribeOn(Schedulers.io())
+    override val state: MutableLiveData<RegistrationState> = MutableLiveData()
+
+    init {
+        state.value = RegistrationState.Default
+    }
+
+    override fun fetchState(requestBody: RequestBody) {
+        repository
+            .verifyNumber(requestBody)
+            .subscribeOn(Schedulers.io())
             .observeOn(AndroidSchedulers.mainThread())
-            .subscribe()
+            .doOnSubscribe {
+                state.value = RegistrationState.Loading
+                isEnabled.value = false
+            }
+            .subscribe({
+                state.value = RegistrationState.Default
+                isEnabled.value = true
+            }, {
+                state.value = RegistrationState.Error(it)
+                isEnabled.value = false
+            })
+            .addTo(compositeDisposable)
+    }
+
+    override fun onCleared() {
+        super.onCleared()
+        compositeDisposable.clear()
     }
 }

@@ -1,4 +1,4 @@
-package yuresko.skifme.registration.model
+package yuresko.skifme.network.model
 
 data class RegBody(
     var username: String,
