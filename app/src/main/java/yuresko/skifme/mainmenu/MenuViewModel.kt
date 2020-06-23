@@ -16,7 +16,6 @@ class MenuViewModel(private val repository: IRepository) : BaseViewModel(), IMen
 
     override val state: MutableLiveData<MenuState> = MutableLiveData()
 
-
     override fun fetchState() {
 
     }

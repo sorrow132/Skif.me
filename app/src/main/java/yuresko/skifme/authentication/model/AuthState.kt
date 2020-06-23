@@ -4,9 +4,9 @@ sealed class AuthState {
 
     object Loading : AuthState()
 
-    object Default : AuthState()
-
-    object DefaultWithTimer : AuthState()
+    data class Default(
+        val token: TokenModel
+    ) : AuthState()
 
     data class Error(
         val error: Throwable

@@ -2,54 +2,81 @@ package yuresko.skifme.registration
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
-import io.reactivex.android.schedulers.AndroidSchedulers
+import io.reactivex.functions.Consumer
 import io.reactivex.schedulers.Schedulers
+import yuresko.skifme.Resource
+import yuresko.skifme.SingleLiveEvent
 import yuresko.skifme.base.BaseViewModel
-import yuresko.skifme.network.model.RequestBody
-import yuresko.skifme.registration.model.RegistrationState
 import yuresko.skifme.repository.IRepository
 import yuresko.skifme.utils.addTo
 
 interface IRegViewModel {
 
-    val isEnabled: LiveData<Boolean>
+    val isLoading: LiveData<Boolean>
 
-    val state: LiveData<RegistrationState>
+    val isSendable: LiveData<Boolean>
 
-    fun fetchState(requestBody: RequestBody)
+    val error: LiveData<Throwable>
+
+    val openNextScreen: LiveData<String>
+
+    fun onTextChanged(text: String)
+
+    fun sendPhoneAuthorization(phone: String)
 }
 
 class RegViewModel(private val repository: IRepository) : IRegViewModel, BaseViewModel() {
 
-    override val isEnabled: MutableLiveData<Boolean> = MutableLiveData()
+    override val isLoading: MutableLiveData<Boolean> = MutableLiveData(false)
 
-    override val state: MutableLiveData<RegistrationState> = MutableLiveData()
+    override val isSendable: MutableLiveData<Boolean> = MutableLiveData(false)
 
-    init {
-        state.value = RegistrationState.Default
+    override val openNextScreen: SingleLiveEvent<String> = SingleLiveEvent()
+
+    override val error: SingleLiveEvent<Throwable> = SingleLiveEvent()
+
+    override fun onTextChanged(text: String) {
+        isSendable.value = text.trim().length > 15
     }
 
-    override fun fetchState(requestBody: RequestBody) {
+    override fun sendPhoneAuthorization(phone: String) {
         repository
-            .verifyNumber(requestBody)
+            .verifyNumber("7$phone")
+            .toObservable()
+            .startWith(Resource.Loading())
             .subscribeOn(Schedulers.io())
-            .observeOn(AndroidSchedulers.mainThread())
-            .doOnSubscribe {
-                state.value = RegistrationState.Loading
-                isEnabled.value = false
+            .subscribe { resource ->
+                when (resource) {
+                    is Resource.Loading -> {
+                        isLoading.postValue(true)
+                        isSendable.postValue(false)
+                    }
+                    is Resource.Data -> {
+                        isLoading.postValue(false)
+                        isSendable.postValue(true)
+                        openNextScreen.postValue(repository.getUserPhone())
+                    }
+                    is Resource.Error -> {
+                        isSendable.postValue(true)
+                        isLoading.postValue(false)
+                        error.postValue(resource.error)
+                    }
+                }
             }
-            .subscribe({
-                state.value = RegistrationState.Default
-                isEnabled.value = true
-            }, {
-                state.value = RegistrationState.Error(it)
-                isEnabled.value = false
-            })
             .addTo(compositeDisposable)
+//        repository
+//            .verifyNumber(requestBody)
+//            .subscribeOn(Schedulers.io())
+//            .observeOn(AndroidSchedulers.mainThread())
+//            .doOnSubscribe {
+//                state.value = RegistrationState.Loading
+//            }
+//            .subscribe({
+//                state.value = RegistrationState.Default
+//            }, {
+//                state.value = RegistrationState.Error(it)
+//            })
+//            .addTo(compositeDisposable)
     }
 
-    override fun onCleared() {
-        super.onCleared()
-        compositeDisposable.clear()
-    }
 }

@@ -19,4 +19,6 @@
     <string name="SMSCode">Код из СМС</string>
     <string name="send_again">Отправить еще раз</string>
     <string name="textViewAsk">Сообщение не приходит?</string>
+    <string name="send_again_text_view">Отправить код заново:</string>
+    <string name="timer">00</string>
 </resources>

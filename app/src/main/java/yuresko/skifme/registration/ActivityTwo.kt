@@ -2,24 +2,23 @@ package yuresko.skifme.registration
 
 import android.content.Intent
 import android.os.Bundle
-import android.view.View
 import android.widget.ImageView
 import android.widget.ProgressBar
-import androidx.appcompat.app.AppCompatActivity
+import androidx.core.view.doOnNextLayout
+import androidx.core.widget.doAfterTextChanged
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import br.com.sapereaude.maskedEditText.MaskedEditText
-import kotlinx.android.synthetic.main.activity_two.*
 import yuresko.skifme.R
 import yuresko.skifme.SkiffApplication
 import yuresko.skifme.authentication.ActivityThree
-import yuresko.skifme.network.model.RequestBody
-import yuresko.skifme.registration.model.RegistrationState
+import yuresko.skifme.base.BaseActivity
 import yuresko.skifme.repository.IRepository
+import yuresko.skifme.utils.visibleOrGone
 import javax.inject.Inject
 
-class ActivityTwo : AppCompatActivity() {
+class ActivityTwo : BaseActivity() {
     private lateinit var maskedEditText: MaskedEditText
     private lateinit var buttonNext: ImageView
     private lateinit var progressBar: ProgressBar
@@ -37,67 +36,57 @@ class ActivityTwo : AppCompatActivity() {
         buttonNext = findViewById(R.id.buttonActivityTwo)
         progressBar = findViewById(R.id.progressBarActivityTwo)
 
-        supportActionBar?.title = "Авторизация"
-        supportActionBar?.setDisplayHomeAsUpEnabled(true)
-
-        buttonNext.isEnabled = false
-        buttonNext.alpha = 0.2f
-
         viewModel = ViewModelProvider(this, object : ViewModelProvider.Factory {
             override fun <T : ViewModel?> create(modelClass: Class<T>): T {
                 return RegViewModel(repository) as T
             }
         }).get(RegViewModel::class.java)
 
-        maskedEditText.addTextChangedListener(RegTextWatcher {
-            invalidateFrom()
-        })
+        supportActionBar?.title = "Авторизация"
+        supportActionBar?.setDisplayHomeAsUpEnabled(true)
 
-        observeLiveData()
+        buttonNext.isEnabled = false
+        buttonNext.alpha = 0.2f
 
-    }
+        buttonNext.setOnClickListener {
+            viewModel.sendPhoneAuthorization(maskedEditText.rawText)
+        }
 
-    private fun invalidateFrom() {
-        if (maskedEditText.text?.length == 16) {
-            buttonNext.isEnabled = true
-            buttonNext.alpha = 1f
-        } else {
-            buttonNext.isEnabled = false
-            buttonNext.alpha = 0.2f
+        maskedEditText.doAfterTextChanged {
+            viewModel.onTextChanged(it?.toString() ?: "")
+        }
+
+        viewModel
+            .isLoading
+            .observe(this, Observer { isLoading ->
+                progressBar.visibleOrGone(isLoading)
+            })
+
+        viewModel
+            .isSendable
+            .observe(this, Observer { isSendable ->
+                buttonNext.isEnabled = isSendable
+                buttonNext.alpha = if (isSendable) {
+                    1f
+                } else {
+                    0.2f
+                }
+            })
+
+        viewModel
+            .openNextScreen
+            .observe(this, Observer { _ ->
+                val intent = Intent(this, ActivityThree::class.java)
+                startActivity(intent)
+            })
+
+        viewModel
+            .error
+            .observe(this, Observer(::displayError))
+
+        maskedEditText.doOnNextLayout {
+            maskedEditText.setText("901353-26-04")
         }
     }
 
-    private fun observeLiveData() {
-        viewModel.state.observe(this, Observer { state ->
-            when (state) {
-                RegistrationState.Loading -> {
-                    progressBar.visibility = View.GONE
-                    textViewNumber.visibility = View.GONE
-                    phoneInput.visibility = View.GONE
-                    buttonActivityTwo.visibility = View.GONE
-                    textViewActivityTwo.visibility = View.GONE
-                }
-                RegistrationState.Default -> {
-                    progressBar.visibility = View.GONE
-                    textViewNumber.visibility = View.VISIBLE
-                    phoneInput.visibility = View.VISIBLE
-                    buttonActivityTwo.visibility = View.VISIBLE
-                    textViewActivityTwo.visibility = View.VISIBLE
-
-                    buttonNext.setOnClickListener {
-                        viewModel.fetchState(RequestBody(maskedEditText.rawText))
-                        val intent = Intent(this, ActivityThree::class.java)
-                        startActivity(intent)
-                    }
-                }
-                is RegistrationState.Error -> {
-                    progressBar.visibility = View.GONE
-                    textViewNumber.visibility = View.GONE
-                    phoneInput.visibility = View.GONE
-                    buttonActivityTwo.visibility = View.GONE
-                    textViewActivityTwo.visibility = View.GONE
-                }
-            }
-        })
-    }
 }

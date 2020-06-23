@@ -1,5 +1,5 @@
 package yuresko.skifme.network.model
 
-data class RequestBody (
+data class RegistrationRequest (
     val phone: String
 )

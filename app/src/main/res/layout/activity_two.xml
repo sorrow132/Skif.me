@@ -9,7 +9,7 @@
     tools:context=".registration.ActivityTwo">
 
     <TextView
-        android:id="@+id/textViewNumber"
+        android:id="@+id/textViewNumberActivityThree"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginEnd="218dp"
@@ -25,7 +25,7 @@
         android:id="@+id/phoneInput"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/textViewNumber"
+        android:layout_below="@+id/textViewNumberActivityThree"
         android:layout_marginStart="25dp"
         android:layout_marginEnd="25dp"
         android:inputType="phone"
@@ -70,8 +70,8 @@
         android:id="@+id/progressBarActivityTwo"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        android:layout_marginTop="10dp"
+        app:layout_constraintTop_toBottomOf="@+id/phoneInput" />
 </androidx.constraintlayout.widget.ConstraintLayout>
