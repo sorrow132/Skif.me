@@ -1,4 +1,4 @@
-package yuresko.skifme.base
+package yuresko.skifme.core.base
 
 import androidx.lifecycle.ViewModel
 import io.reactivex.disposables.CompositeDisposable

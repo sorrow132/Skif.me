@@ -1,4 +1,4 @@
-package yuresko.skifme;
+package yuresko.skifme.core;
 
 import android.util.Log;
 

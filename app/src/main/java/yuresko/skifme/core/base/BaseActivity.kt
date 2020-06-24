@@ -1,4 +1,4 @@
-package yuresko.skifme.base
+package yuresko.skifme.core.base
 
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity

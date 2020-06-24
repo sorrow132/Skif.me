@@ -2,7 +2,7 @@ package yuresko.skifme.mainmenu
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
-import yuresko.skifme.base.BaseViewModel
+import yuresko.skifme.core.base.BaseViewModel
 import yuresko.skifme.mainmenu.model.MenuState
 import yuresko.skifme.repository.IRepository
 

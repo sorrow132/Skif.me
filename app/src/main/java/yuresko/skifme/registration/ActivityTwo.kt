@@ -13,7 +13,7 @@ import br.com.sapereaude.maskedEditText.MaskedEditText
 import yuresko.skifme.R
 import yuresko.skifme.SkiffApplication
 import yuresko.skifme.authentication.ActivityThree
-import yuresko.skifme.base.BaseActivity
+import yuresko.skifme.core.base.BaseActivity
 import yuresko.skifme.repository.IRepository
 import yuresko.skifme.utils.visibleOrGone
 import javax.inject.Inject
@@ -44,9 +44,6 @@ class ActivityTwo : BaseActivity() {
 
         supportActionBar?.title = "Авторизация"
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
-
-        buttonNext.isEnabled = false
-        buttonNext.alpha = 0.2f
 
         buttonNext.setOnClickListener {
             viewModel.sendPhoneAuthorization(maskedEditText.rawText)
@@ -83,10 +80,6 @@ class ActivityTwo : BaseActivity() {
         viewModel
             .error
             .observe(this, Observer(::displayError))
-
-        maskedEditText.doOnNextLayout {
-            maskedEditText.setText("901353-26-04")
-        }
     }
 
 }

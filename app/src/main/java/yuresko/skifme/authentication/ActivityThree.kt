@@ -1,27 +1,26 @@
 package yuresko.skifme.authentication
 
+import android.content.Intent
 import android.os.Bundle
 import android.os.CountDownTimer
-import android.util.Log
 import android.view.View
 import android.widget.EditText
 import android.widget.ImageView
 import android.widget.TextView
-import android.widget.Toast
-import androidx.appcompat.app.AppCompatActivity
+import androidx.core.widget.doAfterTextChanged
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import kotlinx.android.synthetic.main.activity_three.*
 import yuresko.skifme.R
 import yuresko.skifme.SkiffApplication
-import yuresko.skifme.authentication.model.AuthState
-import yuresko.skifme.network.model.RegBody
-import yuresko.skifme.network.model.RegistrationRequest
+import yuresko.skifme.core.base.BaseActivity
+import yuresko.skifme.mainmenu.ActivityMenu
 import yuresko.skifme.repository.IRepository
+import yuresko.skifme.utils.visibleOrGone
 import javax.inject.Inject
 
-class ActivityThree : AppCompatActivity() {
+class ActivityThree : BaseActivity() {
     private lateinit var buttonNext: ImageView
     private lateinit var editText: EditText
     private lateinit var sendAgain: TextView
@@ -53,20 +52,48 @@ class ActivityThree : AppCompatActivity() {
         supportActionBar?.title = "Авторизация"
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
 
-        buttonNext.alpha = 0.2f
-        buttonNext.isEnabled = false
-
         sendAgain.setOnClickListener {
             countDownTimer()
             resetTimer()
-            viewModel.sendMessageAgain(RegistrationRequest((application as SkiffApplication).userNum))
+            viewModel.sendMessageAgain()
         }
 
-        editText.addTextChangedListener(AuthTextWatcher {
-            invalidateForm()
-        })
+        buttonNext.setOnClickListener {
+            viewModel.authentication(editText.text.toString())
+        }
 
-        observeLiveData()
+        editText.doAfterTextChanged {
+            viewModel.onTextChanged(it?.toString() ?: "")
+        }
+
+        viewModel
+            .isLoading
+            .observe(this, Observer { isLoading ->
+                progressBarActivityThree.visibleOrGone(isLoading)
+            })
+
+        viewModel
+            .isSendable
+            .observe(this, Observer { isSendable ->
+                buttonNext.isEnabled = isSendable
+                buttonNext.alpha = if (isSendable) {
+                    1f
+                } else {
+                    0.2f
+                }
+            })
+
+        viewModel
+            .openNextScreen
+            .observe(this, Observer { _ ->
+                val intent = Intent(this, ActivityMenu::class.java)
+                startActivity(intent)
+            })
+
+        viewModel
+            .error
+            .observe(this, Observer(::displayError))
+
         countDownTimer()
         showHideUI()
     }
@@ -113,52 +140,5 @@ class ActivityThree : AppCompatActivity() {
             }
         }
         mCountDownTimer.start()
-    }
-
-    private fun invalidateForm() {
-        if (editText.text.length == 5) {
-            buttonNext.isEnabled = true
-            buttonNext.alpha = 1f
-        } else {
-            buttonNext.isEnabled = false
-            buttonNext.alpha = 0.2f
-        }
-    }
-
-    private fun observeLiveData() {
-        viewModel.state.observe(this, Observer { state ->
-            when (state) {
-                AuthState.Loading -> {
-                    progressBarActivityThree.visibility = View.GONE
-                    textViewNumberActivityThree.visibility = View.GONE
-                    phoneInputActivityThree.visibility = View.GONE
-                    act3ButtonActivityThree.visibility = View.GONE
-                }
-                is AuthState.Default -> {
-                    progressBarActivityThree.visibility = View.GONE
-                    textViewNumberActivityThree.visibility = View.VISIBLE
-                    phoneInputActivityThree.visibility = View.VISIBLE
-                    act3ButtonActivityThree.visibility = View.VISIBLE
-
-                    buttonNext.setOnClickListener {
-                        viewModel.fetchState(
-                            RegBody(
-                                (application as SkiffApplication).userNum, editText.text.toString()
-                            )
-                        )
-                    }
-                    Log.d("XUY", state.token.toString())
-
-                }
-                is AuthState.Error -> {
-                    progressBarActivityThree.visibility = View.GONE
-                    textViewNumberActivityThree.visibility = View.GONE
-                    phoneInputActivityThree.visibility = View.GONE
-                    act3ButtonActivityThree.visibility = View.GONE
-                    val toast = Toast.makeText(this, "Error", Toast.LENGTH_SHORT)
-                    toast.show()
-                }
-            }
-        })
     }
 }

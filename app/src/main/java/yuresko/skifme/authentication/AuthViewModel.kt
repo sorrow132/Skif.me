@@ -2,58 +2,83 @@ package yuresko.skifme.authentication
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
-import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
-import yuresko.skifme.authentication.model.AuthState
-import yuresko.skifme.authentication.model.TokenModel
-import yuresko.skifme.base.BaseViewModel
-import yuresko.skifme.network.model.RegBody
-import yuresko.skifme.network.model.RegistrationRequest
+import yuresko.skifme.authentication.model.TimerState
+import yuresko.skifme.core.AuthenticationResource
+import yuresko.skifme.core.SingleLiveEvent
+import yuresko.skifme.core.base.BaseViewModel
 import yuresko.skifme.repository.IRepository
 import yuresko.skifme.utils.addTo
 
 interface IAuthViewModel {
 
-    val state: LiveData<AuthState>
+    val isLoading: LiveData<Boolean>
 
-    fun fetchState(regBody: RegBody)
+    val isSendable: LiveData<Boolean>
 
-    fun sendMessageAgain(registrationRequest: RegistrationRequest)
+    val error: LiveData<Throwable>
+
+    val timerState: LiveData<TimerState>
+
+    val openNextScreen: LiveData<String>
+
+    fun onTextChanged(text: String)
+
+    fun authentication(code: String)
+
+    fun sendMessageAgain()
 }
 
 class AuthViewModel(private val repository: IRepository) : BaseViewModel(), IAuthViewModel {
 
-    override val state: MutableLiveData<AuthState> = MutableLiveData()
+    override val isLoading: MutableLiveData<Boolean> = MutableLiveData(false)
 
-    override fun fetchState(regBody: RegBody) {
+    override val isSendable: MutableLiveData<Boolean> = MutableLiveData(false)
+
+    override val error: SingleLiveEvent<Throwable> = SingleLiveEvent()
+
+    override val timerState: MutableLiveData<TimerState> = MutableLiveData()
+
+    override val openNextScreen: SingleLiveEvent<String> = SingleLiveEvent()
+
+    override fun onTextChanged(text: String) {
+        isSendable.value = text.trim().length > 4
+    }
+
+    override fun authentication(code: String) {
         repository
-            .authentication(regBody)
-            .map { response ->
-                TokenModel(response.token)
-            }
+            .authentication(code)
+            .toObservable()
+            .startWith(AuthenticationResource.Loading())
             .subscribeOn(Schedulers.io())
-            .observeOn(AndroidSchedulers.mainThread())
-            .doOnSubscribe {
-                state.value = AuthState.Loading
-            }.subscribe({
-                state.value = AuthState.Default(it)
-            }, {
-                state.value = AuthState.Error(it)
-            })
+            .subscribe { resource ->
+                when (resource) {
+                    is AuthenticationResource.Loading -> {
+                        isLoading.postValue(true)
+                        isSendable.postValue(false)
+                    }
+                    is AuthenticationResource.Data -> {
+                        isLoading.postValue(false)
+                        isSendable.postValue(true)
+                        openNextScreen.postValue(repository.getUserCode())
+                    }
+                    is AuthenticationResource.Error -> {
+                        isSendable.postValue(true)
+                        isLoading.postValue(false)
+                        error.postValue(resource.error)
+                    }
+                }
+            }.addTo(compositeDisposable)
+    }
+
+    override fun sendMessageAgain() {
+        repository
+            .verifyNumber(
+                repository
+                    .getUserPhone()
+            )
+            .subscribeOn(Schedulers.io())
+            .subscribe()
             .addTo(compositeDisposable)
-    }
-
-    override fun sendMessageAgain(registrationRequest: RegistrationRequest) {
-//        repository
-//            .verifyNumber(registrationRequest)
-//            .subscribeOn(Schedulers.io())
-//            .observeOn(AndroidSchedulers.mainThread())
-//            .subscribe()
-//            .addTo(compositeDisposable)
-    }
-
-    override fun onCleared() {
-        super.onCleared()
-        compositeDisposable.clear()
     }
 }

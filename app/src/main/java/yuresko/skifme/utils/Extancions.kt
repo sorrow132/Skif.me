@@ -9,7 +9,7 @@ fun Disposable.addTo(compositeDisposable: CompositeDisposable) {
 }
 
 fun View.visibleOrGone(isVisible: Boolean) {
-    if(isVisible) {
+    if (isVisible) {
         visibility = View.VISIBLE
     } else {
         visibility = View.GONE
